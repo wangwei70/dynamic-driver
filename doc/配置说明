@@ -1,0 +1,22 @@
+一、驱动包的目录配置
+    1.在classpath目录或者项目运行的工作目录下(优先级更高)增加/driver目录；
+    2.在/driver目录下增加对应的数据库类型目录${dbType}，如mysql、postgresql，详见com.asia.driver.dynamic.enums.DriverEnum枚举类中的dbtype属性；
+    3.在/driver/${dbType}目录下新增驱动版本目录${jarVersion}，如42.2.26，注意将驱动版本中的'.'替换为'_'，
+    详见com.asia.driver.dynamic.enums.DriverEnum枚举类中的jarVersion属性；
+    4.在/driver/${dbType}/${dbVersion}目录下新增JDBC驱动jar包。
+
+二、驱动包映射的配置文件
+    1.在上述/drive目录下新增driver.properties文件；
+    2.按照如下格式进行数据库版本和驱动包的映射配置，=前面的配置表示目标数据库的类型和版本，=后面的配置表示所需要使用的驱动jar包路径，
+    注意将数据库版本和驱动版本中的'.'替换为'_'：
+        # ${dbType}.${dbVersion}=${dbType}/${jarVersion}/${diverName}
+        例：postgresql.1_1_1=postgresql/42_1_1/postgresql-42.1.1.jar
+
+三、驱动URL配置
+    1.使用JDBC连接时，通过URL可进行代理驱动的配置
+    2.代理驱动URL基于JDBC标准URL,增加proxy前缀和部分参数，配置示例：
+        proxy:jdbc:mysql://10.21.10.146:3306/postgres?proxyDbVersion=1.1.1&ApplicationName=mytest
+    3.支持的参数设置：
+        proxyDbVersion
+            描述：JDBC目标数据库版本
+            设置方式：URL中？后面的参数配置
